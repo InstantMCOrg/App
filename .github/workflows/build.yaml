@@ -27,7 +27,8 @@ jobs:
 
       - name: Zip web files
         run: |
-          zip -j -r web.zip build/web/
+          cd build/web
+          zip -r ../../web.zip .
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
