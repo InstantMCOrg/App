@@ -47,6 +47,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   test: ^1.22.0
+  #flutter_launcher_name: ^0.0.1
+  flutter_launcher_icons: "^0.11.0"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -89,3 +91,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#131a28"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+
+
+flutter_launcher_name:
+  name: "InstantMC"
