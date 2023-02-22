@@ -1,0 +1,38 @@
+name: Build web app and append files to release
+on:
+  release:
+    branches: [ "main" ]
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build-web-app-and-append-to-release:
+    name: Build web app and append files to release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # or: 'beta', 'dev' or 'master'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Test application
+        run: flutter pub test
+
+      - name: Build web app
+        run: flutter build web
+
+      - name: Zip web files
+        run: |
+          zip -r web.zip build/web/
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: web.zip
+          tag: ${{ github.ref }}
+          overwrite: true
