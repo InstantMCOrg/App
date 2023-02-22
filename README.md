@@ -1,2 +1,2 @@
 # App
-Front-End app for the InstantMinecraft Server system
+Front-End app for the InstantMC Server system
