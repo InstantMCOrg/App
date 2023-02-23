@@ -1,0 +1,4 @@
+enum LoginStep {
+  url,
+  credentials
+}
