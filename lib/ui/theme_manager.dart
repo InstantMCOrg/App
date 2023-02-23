@@ -1,5 +1,6 @@
 import 'package:InstantMC/ui/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ThemeManager {
   static ThemeData dark() {
@@ -9,9 +10,9 @@ class ThemeManager {
       colorScheme: ColorScheme(
         background: colors.primary,
         brightness: Brightness.dark,
-        error: colors.error,
+        error: ColorManager.error,
         onBackground: colors.secondary,
-        onError: colors.error,
+        onError: ColorManager.error,
         onPrimary: colors.secondary,
         onSecondary: colors.accent,
         onSurface: colors.secondary,
@@ -22,7 +23,16 @@ class ThemeManager {
       scaffoldBackgroundColor: colors.primary,
       appBarTheme: AppBarTheme(
         elevation: 0,
-
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        backgroundColor: colors.primary
+      ),
+      cardColor: colors.cardBackgroundColor,
+      textTheme: TextTheme(
+        labelMedium: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        )
       )
     );
   }
