@@ -1,0 +1,1 @@
+const kLoadingIconDefaultSize = 200.0;
