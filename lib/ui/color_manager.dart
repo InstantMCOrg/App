@@ -9,6 +9,8 @@ class ColorManager {
   final Color cardBackgroundColor = const Color.fromRGBO(59, 58, 65, 1);
   static const Color white = Color.fromRGBO(255, 255, 255, 1);
   static const Color black = Color.fromRGBO(21, 19, 28, 1);
+  static const Color grey = Color.fromRGBO(127, 128, 139, 1);
+  static const Color success = Color.fromRGBO(75, 181, 67, 1);
 
   ColorManager.dark() :
         primary = const Color.fromRGBO(21, 27, 41, 1),
