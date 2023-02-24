@@ -20,6 +20,11 @@ class ThemeManager {
         secondary: colors.secondary,
         surface: colors.secondary,
       ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: colors.accent,
+        selectionColor: colors.accent,
+        selectionHandleColor: colors.accent,
+      ),
       scaffoldBackgroundColor: colors.primary,
       appBarTheme: AppBarTheme(
         elevation: 0,
@@ -32,7 +37,49 @@ class ThemeManager {
         labelMedium: GoogleFonts.poppins(
           fontSize: 16,
           fontWeight: FontWeight.w600,
+        ),
+        labelSmall: GoogleFonts.poppins(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: ColorManager.grey
+        ),
+        // we dont use titelLarge because that overrides the appbars text style
+        displayLarge: GoogleFonts.poppins(
+          fontSize: 30,
+          color: ColorManager.white,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(colors.secondary),
+          foregroundColor: MaterialStateProperty.all<Color>(ColorManager.white)
         )
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: const OutlineInputBorder(),
+        labelStyle: TextStyle(
+          color: colors.secondary,
+        ),
+        floatingLabelStyle: TextStyle(
+          color: colors.accent
+        ),
+        // when input is not focused
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: colors.secondary,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: colors.accent,
+          ),
+        ),
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: colors.accent,
+        circularTrackColor: Colors.red,
+        linearTrackColor: colors.secondary
       )
     );
   }
