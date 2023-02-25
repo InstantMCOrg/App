@@ -26,7 +26,6 @@ class InstantMCRepository {
     return data.containsKey("server") && data["server"] == kServerName;
   }
 
-  // Throws
   Future<LoginResponseModel> login(String username, String password) async {
     final response = await _api.login(username, password);
 
@@ -34,4 +33,15 @@ class InstantMCRepository {
 
     return LoginResponseModel(data["token"], data["password_change_required"]);
   }
+
+  /// Returns token after successful password change
+  Future<String> changePassword(String newPassword) async {
+    final response = await _api.changePassword(newPassword);
+
+    final data = jsonDecode(response.data);
+
+    return data["token"];
+  }
+
+  String get targetMachineUrl => _api.targetMachineUrl;
 }

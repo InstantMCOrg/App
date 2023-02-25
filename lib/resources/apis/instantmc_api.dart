@@ -35,4 +35,12 @@ class InstantMCApi {
       })
     );
   }
+
+  Future<Response> changePassword(String newPassword) async {
+    return _dio.post("$_apiRoutePrefix/user/password/change",
+      data: FormData.fromMap({
+        "password": newPassword
+      })
+    );
+  }
 }
