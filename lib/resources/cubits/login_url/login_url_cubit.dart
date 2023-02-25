@@ -46,7 +46,6 @@ class LoginUrlCubit extends Cubit<LoginUrlState> {
         emit(LoginUrlConnectionError(_url, InstantMCConnectionErrorException("Unknown error", InstantMCConnectionErrorType.unknown)));
       }
     } catch(e) {
-      print(e);
       emit(LoginUrlConnectionError(_url, InstantMCConnectionErrorException("Unknown error", InstantMCConnectionErrorType.unknown)));
     }
   }

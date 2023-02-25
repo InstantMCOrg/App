@@ -43,9 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
         // wrong credentials
         emit(LoginFailed(InstantMCConnectionErrorException("Wrong credentials", InstantMCConnectionErrorType.wrongCredentials)));
       }
-      print(e);
     } catch(e) {
-      print(e);
     }
   }
 }
