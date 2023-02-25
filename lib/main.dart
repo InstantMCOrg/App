@@ -25,9 +25,9 @@ class InstantMC extends StatelessWidget {
 
   InstantMC({Key? key}) : super(key: key) {
     _startCubit = StartCubit(_storageRepository);
-    _loginStepsSwitcherCubit = LoginStepsSwitcherCubit();
-    _loginCubit = LoginCubit();
     _loginUrlCubit = LoginUrlCubit(_instantMCRepository);
+    _loginStepsSwitcherCubit = LoginStepsSwitcherCubit(_loginUrlCubit);
+    _loginCubit = LoginCubit();
   }
 
   @override

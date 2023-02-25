@@ -1,4 +1,5 @@
 import 'package:InstantMC/resources/cubits/login_steps_switcher/login_steps_switcher_cubit.dart';
+import 'package:InstantMC/ui/fragments/login_screen/login_credentials_step_fragment.dart';
 import 'package:InstantMC/ui/fragments/login_screen/login_url_step_fragment.dart';
 import 'package:InstantMC/ui/widgets/login_steps_switcher_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,41 +14,45 @@ class LoginScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text("Login"),
         ),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final maxHeight = constraints.maxHeight; // available height minus appbar height
+        body: LayoutBuilder(builder: (context, constraints) {
+          final maxHeight =
+              constraints.maxHeight; // available height minus appbar height
 
-            return SingleChildScrollView(
-              // we need this weird hacky way to make sure the step selector widget always aligns to the bottom to ensure the ui is consistent
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: maxHeight
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BlocBuilder<LoginStepsSwitcherCubit, LoginStepsSwitcherState>(
-                      buildWhen: (oldState, newState) => newState is LoginStepsSwitcherUrlStep || newState is LoginStepsSwitcherCredentialsStep,
-                      builder: (context, state) {
-                        if(state is LoginStepsSwitcherCredentialsStep) {
+          return SingleChildScrollView(
+            // we need this weird hacky way to make sure the step selector widget always aligns to the bottom to ensure the ui is consistent
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: maxHeight),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BlocBuilder<LoginStepsSwitcherCubit, LoginStepsSwitcherState>(
+                    buildWhen: (oldState, newState) =>
+                        newState is LoginStepsSwitcherUrlStep ||
+                        newState is LoginStepsSwitcherCredentialsStep,
+                    builder: (context, state) {
+                      Widget widget = const LoginUrlStepFragment();
 
-                        }
-                        return const LoginUrlStepFragment();
-                      },
+                      if (state is LoginStepsSwitcherCredentialsStep) {
+                        widget = const LoginCredentialsStepFragment();
+                      }
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        child: widget,
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    width: double.infinity,
+                    height: LoginStepsSwitcherWidget.preferredSize,
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: LoginStepsSwitcherWidget(),
                     ),
-                    const SizedBox(
-                      width: double.infinity,
-                      height: LoginStepsSwitcherWidget.preferredSize,
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: LoginStepsSwitcherWidget(),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-            );
-          }
-        ));
+            ),
+          );
+        }));
   }
 }
