@@ -12,5 +12,15 @@ class StorageRepository {
     return await _storage.read(key: Storage.targetMachineUrl);
   }
 
+  Future<String?> getToken() async {
+    return await _storage.read(key: Storage.token);
+  }
 
+  Future<void> saveToken(String token) async {
+    await _storage.write(key: Storage.token, value: token);
+  }
+
+  Future<void> saveTargetServerUrl(String targetServerUrl) async {
+    await _storage.write(key: Storage.targetMachineUrl, value: targetServerUrl);
+  }
 }
