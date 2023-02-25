@@ -23,17 +23,35 @@ jobs:
 #        run: flutter pub test
 
       - name: Build web app
-        run: flutter build web
+        run: flutter build web --release --source-maps
 
       - name: Zip web files
         run: |
           cd build/web
           zip -r ../../web.zip .
+          cd ../..
+
+      - name: Build debug web app
+        run: flutter build web --profile --dart-define=Dart2jsOptimization=O0
+
+      - name: Zip web files
+        run: |
+          cd build/web
+          zip -r ../../web_debug.zip .
+          cd ../..
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: web.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: web_debug.zip
           tag: ${{ github.ref }}
           overwrite: true
