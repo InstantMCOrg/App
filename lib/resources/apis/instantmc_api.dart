@@ -26,4 +26,13 @@ class InstantMCApi {
   Future<Response> rootRoute() async {
     return _dio.get("$_apiRoutePrefix/");
   }
+
+  Future<Response> login(String username, String password) async {
+    return _dio.post("$_apiRoutePrefix/login",
+      data: FormData.fromMap({
+        "username": username,
+        "password": password
+      })
+    );
+  }
 }

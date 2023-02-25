@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:InstantMC/constants/config.dart';
+import 'package:InstantMC/models/http/LoginResponseModel.dart';
 import 'package:InstantMC/resources/apis/instantmc_api.dart';
 
 class InstantMCRepository {
@@ -23,5 +24,14 @@ class InstantMCRepository {
 
     final data = jsonDecode(response.data);
     return data.containsKey("server") && data["server"] == kServerName;
+  }
+
+  // Throws
+  Future<LoginResponseModel> login(String username, String password) async {
+    final response = await _api.login(username, password);
+
+    final data = jsonDecode(response.data);
+
+    return LoginResponseModel(data["token"], data["password_change_required"]);
   }
 }
