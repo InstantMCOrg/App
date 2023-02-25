@@ -18,7 +18,10 @@ class InstantMCRepository {
     _api = InstantMCApi.url(url);
   }
 
-  // Throws
+  void setToken(String token) {
+    _api.setToken(token);
+  }
+
   Future<bool> isInstantMCAtUrlEndpoint() async {
     final response = await _api.rootRoute();
 

@@ -22,6 +22,12 @@ class InstantMCApi {
     }
     _dio = Dio(_defaultBaseOptions.copyWith(baseUrl: baseUrl));
   }
+
+  String get targetMachineUrl => _dio.options.baseUrl;
+
+  void setToken(String token) {
+    _dio.options = _dio.options.copyWith(headers: {"auth":token});
+  }
   
   Future<Response> rootRoute() async {
     return _dio.get("$_apiRoutePrefix/");
