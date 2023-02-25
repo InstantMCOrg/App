@@ -7,6 +7,7 @@ import '../color_manager.dart';
 class LoginStepsSwitcherWidget extends StatelessWidget {
   const LoginStepsSwitcherWidget({Key? key}) : super(key: key);
   final double radius = 25;
+  static const double preferredSize = 100;
   static const switchAnimationDuration = Duration(milliseconds: 700);
   static const switchNotAllowedAnimationDuration = Duration(milliseconds: 75);
   final _animationCurve = Curves.easeOutQuint;
