@@ -6,6 +6,7 @@ import 'package:InstantMC/ui/widgets/max_size_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../resources/cubits/user/user_cubit.dart';
 import '../../color_manager.dart';
 
 class LoginCredentialsStepFragment extends StatelessWidget {
@@ -52,6 +53,7 @@ class LoginCredentialsStepFragment extends StatelessWidget {
               // redirect to dashboard
               Navigator.pushReplacementNamed(context, Routes.dashboard);
             } else if(state is LoginSuccessPasswordChangeRequired) {
+              context.read<UserCubit>().login(state.token);
               Navigator.pushReplacementNamed(context, Routes.passwordChange);
             }
           },
