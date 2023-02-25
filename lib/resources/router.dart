@@ -18,7 +18,7 @@ class AppRouter {
       case Routes.dashboard:
         return MaterialPageRoute(builder: (_) =>  const DashboardScreen());
       case Routes.passwordChange:
-        return MaterialPageRoute(builder: (_) =>  const RequiredPasswordChangeScreen());
+        return MaterialPageRoute(builder: (_) =>  RequiredPasswordChangeScreen());
     }
     // default route
     return MaterialPageRoute(builder: (_) =>  const HomeScreen());
