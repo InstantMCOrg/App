@@ -1,6 +1,9 @@
 import 'package:InstantMC/constants/config.dart';
+import 'package:InstantMC/resources/cubits/login/login_cubit.dart';
 import 'package:InstantMC/resources/cubits/login_steps_switcher/login_steps_switcher_cubit.dart';
+import 'package:InstantMC/resources/cubits/login_url/login_url_cubit.dart';
 import 'package:InstantMC/resources/cubits/start/start_cubit.dart';
+import 'package:InstantMC/resources/repositories/instantmc_repository.dart';
 import 'package:InstantMC/resources/repositories/storage_repository.dart';
 import 'package:InstantMC/resources/router.dart';
 import 'package:InstantMC/ui/theme_manager.dart';
@@ -14,12 +17,17 @@ void main() {
 
 class InstantMC extends StatelessWidget {
   final StorageRepository _storageRepository = StorageRepository();
+  final InstantMCRepository _instantMCRepository = InstantMCRepository();
   late final StartCubit _startCubit;
   late final LoginStepsSwitcherCubit _loginStepsSwitcherCubit;
+  late final LoginCubit _loginCubit;
+  late final LoginUrlCubit _loginUrlCubit;
 
   InstantMC({Key? key}) : super(key: key) {
     _startCubit = StartCubit(_storageRepository);
     _loginStepsSwitcherCubit = LoginStepsSwitcherCubit();
+    _loginCubit = LoginCubit();
+    _loginUrlCubit = LoginUrlCubit(_instantMCRepository);
   }
 
   @override
@@ -28,6 +36,8 @@ class InstantMC extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => _startCubit),
         BlocProvider(create: (_) => _loginStepsSwitcherCubit),
+        BlocProvider(create: (_) => _loginCubit),
+        BlocProvider(create: (_) => _loginUrlCubit),
       ],
       child: MaterialApp(
         title: kAppName,
