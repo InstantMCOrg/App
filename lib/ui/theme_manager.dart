@@ -49,6 +49,16 @@ class ThemeManager {
           color: ColorManager.white,
           fontWeight: FontWeight.w600,
         ),
+        displayMedium: GoogleFonts.poppins(
+          fontSize: 20,
+          color: ColorManager.white,
+          fontWeight: FontWeight.w600,
+        ),
+        displaySmall: GoogleFonts.poppins(
+          fontSize: 15,
+          color: ColorManager.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
