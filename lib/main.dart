@@ -45,7 +45,7 @@ class InstantMC extends StatelessWidget {
   InstantMC({Key? key}) : super(key: key) {
     String? targetUrl;
     if(kIsWeb) {
-      targetUrl = window.location.host;
+      targetUrl = "${window.location.protocol}//${window.location.host}";
     }
     _startCubit = StartCubit(_storageRepository, serverUrl: targetUrl);
     _loginUrlCubit = LoginUrlCubit(_instantMCRepository, _startCubit);
