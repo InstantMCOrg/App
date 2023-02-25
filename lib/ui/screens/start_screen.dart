@@ -16,6 +16,8 @@ class StartScreen extends StatelessWidget {
       listener: (context, state) {
         if(state is StartServerUrlRequired) {
           Navigator.pushReplacementNamed(context, Routes.login);
+        } else if(state is StartSavedServerFound) {
+          Navigator.pushReplacementNamed(context, Routes.dashboard);
         }
       },
       builder: (context, state) {

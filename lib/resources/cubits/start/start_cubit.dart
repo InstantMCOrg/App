@@ -15,10 +15,13 @@ class StartCubit extends Cubit<StartState> {
     emit(StartLoading());
 
     final String? targetServerUrl = await _storageRepository.getTargetServerUrl();
+    final String? token = await _storageRepository.getToken();
     if(targetServerUrl == null) {
       // no server has been saved. We need to login first
       emit(StartServerUrlRequired());
       return;
+    } else if(targetServerUrl != null && token != null) {
+      emit(StartSavedServerFound(token, targetServerUrl));
     }
   }
 }
