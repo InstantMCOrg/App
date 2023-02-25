@@ -41,7 +41,7 @@ class LoginUrlStepFragment extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              LoginUrlEditWidget(),
+              const LoginUrlEditWidget(),
               BlocBuilder<LoginUrlCubit, LoginUrlState>(
                 builder: (context, state) {
                   const progressIndicator = LinearProgressIndicator();

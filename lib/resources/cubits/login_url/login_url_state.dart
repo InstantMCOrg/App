@@ -35,8 +35,9 @@ class LoginUrlConnectionError extends LoginUrlState {
 
 class LoginUrlConnectionSuccess extends LoginUrlState {
   final String url;
+  final Uri uri;
 
-  const LoginUrlConnectionSuccess(this.url);
+  const LoginUrlConnectionSuccess(this.url, this.uri);
 
   List<Object> get props => [];
 }

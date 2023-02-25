@@ -31,7 +31,7 @@ class LoginUrlCubit extends Cubit<LoginUrlState> {
     try {
       final isValidInstantMCEndpoint = await _instantMCRepository.isInstantMCAtUrlEndpoint();
       if(isValidInstantMCEndpoint) {
-        emit(LoginUrlConnectionSuccess(_url));
+        emit(LoginUrlConnectionSuccess(_url, Uri.parse(_url)));
       } else {
         emit(LoginUrlConnectionError(_url, InstantMCConnectionErrorException("No valid endpoint", InstantMCConnectionErrorType.noValidEndpoint)));
       }

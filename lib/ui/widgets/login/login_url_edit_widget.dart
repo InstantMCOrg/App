@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../color_manager.dart';
 
 class LoginUrlEditWidget extends StatelessWidget {
-  LoginUrlEditWidget({Key? key}) : super(key: key);
+  const LoginUrlEditWidget({Key? key}) : super(key: key);
   static const initialValue = "https://";
 
   @override
