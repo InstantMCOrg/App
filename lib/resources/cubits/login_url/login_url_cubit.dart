@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:InstantMC/constants/enums/instantmc_connection_error_type.dart';
 import 'package:InstantMC/resources/exceptions/instantmc_connection_error_exception.dart';
 import 'package:InstantMC/ui/widgets/login/login_url_edit_widget.dart';
@@ -6,12 +8,22 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../repositories/instantmc_repository.dart';
+import '../start/start_cubit.dart';
 
 part 'login_url_state.dart';
 
 class LoginUrlCubit extends Cubit<LoginUrlState> {
   final InstantMCRepository _instantMCRepository;
-  LoginUrlCubit(this._instantMCRepository) : super(LoginUrlInitial());
+  final StartCubit _startCubit;
+  late final StreamSubscription _startStream;
+  LoginUrlCubit(this._instantMCRepository, this._startCubit) : super(LoginUrlInitial()) {
+    _startStream = _startCubit.stream.listen((startState) {
+      if(startState is StartServerCredentialsRequired) {
+        textChanged(startState.targetUrl);
+        emit(LoginUrlConnectionSuccess(startState.targetUrl, Uri.parse(startState.targetUrl)));
+      }
+    });
+  }
 
   String _url = LoginUrlEditWidget.initialValue;
 
@@ -48,5 +60,11 @@ class LoginUrlCubit extends Cubit<LoginUrlState> {
     } catch(e) {
       emit(LoginUrlConnectionError(_url, InstantMCConnectionErrorException("Unknown error", InstantMCConnectionErrorType.unknown)));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _startStream.cancel();
+    return super.close();
   }
 }

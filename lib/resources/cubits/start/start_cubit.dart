@@ -7,8 +7,20 @@ part 'start_state.dart';
 
 class StartCubit extends Cubit<StartState> {
   final StorageRepository _storageRepository;
-  StartCubit(this._storageRepository) : super(StartInitial()) {
-    init();
+  /// serverUrl is preserved for usage in web
+  StartCubit(this._storageRepository, {String? serverUrl}) : super(StartInitial()) {
+    if(serverUrl != null) {
+      assert(kIsWeb);
+      // we save the target url into storage so the user can skip the url step
+      final uri = Uri.parse(serverUrl);
+      // DEBUG
+      print(uri.hasScheme);
+      print(uri.scheme);
+      // DEBUG
+      _storageRepository.saveTargetServerUrl(serverUrl).then((value) => init());
+    } else {
+      init();
+    }
   }
 
   void init() async {
@@ -22,6 +34,8 @@ class StartCubit extends Cubit<StartState> {
       return;
     } else if(targetServerUrl != null && token != null) {
       emit(StartSavedServerFound(token, targetServerUrl));
+    } else if(targetServerUrl != null && token == null) {
+      emit(StartServerCredentialsRequired(targetServerUrl));
     }
   }
 }

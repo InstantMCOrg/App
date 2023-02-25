@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:InstantMC/constants/config.dart';
 import 'package:InstantMC/resources/cubits/login/login_cubit.dart';
 import 'package:InstantMC/resources/cubits/login_steps_switcher/login_steps_switcher_cubit.dart';
@@ -8,12 +10,25 @@ import 'package:InstantMC/resources/cubits/user/user_cubit.dart';
 import 'package:InstantMC/resources/repositories/instantmc_repository.dart';
 import 'package:InstantMC/resources/repositories/storage_repository.dart';
 import 'package:InstantMC/resources/router.dart';
+import 'package:InstantMC/resources/routes.dart';
 import 'package:InstantMC/ui/theme_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  if(kIsWeb) {
+    // resetting the route to '/' => some browsers preserve the route, we don't want that
+    final String defaultRouteName = WidgetsBinding.instance.window.defaultRouteName;
+    if(defaultRouteName != Routes.start) {
+      SystemNavigator.routeUpdated(
+          routeName: '/',
+          previousRouteName: null
+      );
+    }
+  }
   runApp(InstantMC());
 }
 
@@ -28,9 +43,13 @@ class InstantMC extends StatelessWidget {
   late final UserCubit _userCubit;
 
   InstantMC({Key? key}) : super(key: key) {
-    _startCubit = StartCubit(_storageRepository);
-    _loginUrlCubit = LoginUrlCubit(_instantMCRepository);
-    _loginStepsSwitcherCubit = LoginStepsSwitcherCubit(_loginUrlCubit);
+    String? targetUrl;
+    if(kIsWeb) {
+      targetUrl = window.location.host;
+    }
+    _startCubit = StartCubit(_storageRepository, serverUrl: targetUrl);
+    _loginUrlCubit = LoginUrlCubit(_instantMCRepository, _startCubit);
+    _loginStepsSwitcherCubit = LoginStepsSwitcherCubit(_loginUrlCubit, _startCubit);
     _loginCubit = LoginCubit(_instantMCRepository);
     _userCubit = UserCubit(_instantMCRepository, _storageRepository, _startCubit);
     _passwordChangeCubit = PasswordChangeCubit(_instantMCRepository, _userCubit);

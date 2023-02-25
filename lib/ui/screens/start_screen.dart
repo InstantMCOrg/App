@@ -7,19 +7,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../resources/cubits/start/start_cubit.dart';
 
-class StartScreen extends StatelessWidget {
+class StartScreen extends StatefulWidget {
   const StartScreen({Key? key}) : super(key: key);
 
   @override
+  State<StartScreen> createState() => _StartScreenState();
+}
+
+class _StartScreenState extends State<StartScreen> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(body: BlocConsumer<StartCubit, StartState>(
-      listener: (context, state) {
-        if(state is StartServerUrlRequired) {
-          Navigator.pushReplacementNamed(context, Routes.login);
-        } else if(state is StartSavedServerFound) {
-          Navigator.pushReplacementNamed(context, Routes.dashboard);
-        }
-      },
+      listener: reactToState,
       builder: (context, state) {
         if (state is StartLoading) {
           return Column(
@@ -34,8 +33,27 @@ class StartScreen extends StatelessWidget {
             ],
           );
         }
-        return Container();
+        return Container(child: Text(state.toString()),);
       },
     ));
+  }
+
+  void reactToState(BuildContext context, StartState state) {
+    if(state is StartServerUrlRequired || state is StartServerCredentialsRequired) {
+      Navigator.pushReplacementNamed(context, Routes.login);
+    } else if(state is StartSavedServerFound) {
+      Navigator.pushReplacementNamed(context, Routes.dashboard);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) {
+          //we need to check if state got missed in the widget
+      final startState = context.read<StartCubit>().state;
+      reactToState(context, startState);
+    });
   }
 }
