@@ -1,0 +1,4 @@
+enum ServerStatus {
+  running,
+  preparing
+}
