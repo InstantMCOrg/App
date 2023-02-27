@@ -7,6 +7,8 @@ import 'package:InstantMC/resources/apis/instantmc_api.dart';
 class InstantMCRepository {
   InstantMCApi _api = InstantMCApi();
 
+  String get targetMachineUrl => _api.targetMachineUrl;
+
   static bool isUrlValid(String url) {
     Uri? uri = Uri.tryParse(url);
     if(uri == null) return false;
@@ -46,5 +48,5 @@ class InstantMCRepository {
     return data["token"];
   }
 
-  String get targetMachineUrl => _api.targetMachineUrl;
+
 }

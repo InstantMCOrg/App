@@ -49,4 +49,8 @@ class InstantMCApi {
       })
     );
   }
+
+  Future<Response> getRunningServer() async {
+    return _dio.get("$_apiRoutePrefix/server");
+  }
 }
