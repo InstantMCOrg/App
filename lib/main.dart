@@ -1,4 +1,7 @@
-import 'dart:html';
+import 'dart:io';
+
+import 'package:InstantMC/resources/cubits/server/server_cubit.dart';
+import 'package:universal_html/html.dart';
 
 import 'package:InstantMC/constants/config.dart';
 import 'package:InstantMC/resources/cubits/login/login_cubit.dart';
@@ -17,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if(kIsWeb) {
     // resetting the route to '/' => some browsers preserve the route, we don't want that
@@ -28,6 +31,9 @@ void main() {
           previousRouteName: null
       );
     }
+  } else {
+    ByteData data = await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
+    SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
   }
   runApp(InstantMC());
 }
@@ -41,6 +47,7 @@ class InstantMC extends StatelessWidget {
   late final LoginUrlCubit _loginUrlCubit;
   late final PasswordChangeCubit _passwordChangeCubit;
   late final UserCubit _userCubit;
+  late final ServerCubit _serverCubit;
 
   InstantMC({Key? key}) : super(key: key) {
     String? targetUrl;
@@ -53,6 +60,7 @@ class InstantMC extends StatelessWidget {
     _loginCubit = LoginCubit(_instantMCRepository);
     _userCubit = UserCubit(_instantMCRepository, _storageRepository, _startCubit);
     _passwordChangeCubit = PasswordChangeCubit(_instantMCRepository, _userCubit);
+    _serverCubit = ServerCubit(_instantMCRepository, _userCubit);
   }
 
   @override
@@ -65,6 +73,7 @@ class InstantMC extends StatelessWidget {
         BlocProvider(create: (_) => _loginUrlCubit),
         BlocProvider(create: (_) => _passwordChangeCubit),
         BlocProvider(create: (_) => _userCubit),
+        BlocProvider(create: (_) => _serverCubit),
       ],
       child: MaterialApp(
         title: kAppName,
