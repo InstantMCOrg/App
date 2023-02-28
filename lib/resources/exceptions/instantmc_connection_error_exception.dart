@@ -4,4 +4,6 @@ class InstantMCConnectionErrorException implements Exception {
   String message;
   InstantMCConnectionErrorType type;
   InstantMCConnectionErrorException(this.message, this.type);
+
+  InstantMCConnectionErrorException.fromType(InstantMCConnectionErrorType errorType) : type = errorType, message = errorType.errorMessage();
 }
