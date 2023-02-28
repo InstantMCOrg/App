@@ -30,6 +30,9 @@ class InstantMCApi {
   }
   
   Future<Response> rootRoute() async {
+    if(kDebugMode) {
+      print("Checking if ${_dio.options.baseUrl} is a valid InstantMC server...");
+    }
     return _dio.get("$_apiRoutePrefix/");
   }
 

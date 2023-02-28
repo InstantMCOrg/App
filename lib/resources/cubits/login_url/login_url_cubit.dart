@@ -6,6 +6,7 @@ import 'package:InstantMC/ui/widgets/login/login_url_edit_widget.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../repositories/instantmc_repository.dart';
 import '../start/start_cubit.dart';
@@ -28,12 +29,17 @@ class LoginUrlCubit extends Cubit<LoginUrlState> {
   String _url = LoginUrlEditWidget.initialValue;
 
   void textChanged(String newUrl) {
-    emit(LoginUrlChanged(newUrl));
     _url = newUrl;
+    emit(LoginUrlChanged(_url));
   }
 
   void check() async {
     emit(LoginUrlChecking(_url));
+    // an slash ('/') can cause errors
+    if(_url.endsWith("/")) {
+      _url = _url.substring(0, _url.length - 1);
+    }
+    textChanged(_url);
     final validUrl = InstantMCRepository.isUrlValid(_url);
     if(!validUrl) {
       emit(LoginUrlConnectionError(_url, InstantMCConnectionErrorException("'$_url' is not a valid URL", InstantMCConnectionErrorType.urlMalformed)));
@@ -41,6 +47,9 @@ class LoginUrlCubit extends Cubit<LoginUrlState> {
     }
     _instantMCRepository.setTargetMachineUrl(_url);
     try {
+      if(kDebugMode) {
+        print("Trying to connect to $_url...");
+      }
       final isValidInstantMCEndpoint = await _instantMCRepository.isInstantMCAtUrlEndpoint();
       if(isValidInstantMCEndpoint) {
         emit(LoginUrlConnectionSuccess(_url, Uri.parse(_url)));
@@ -57,6 +66,7 @@ class LoginUrlCubit extends Cubit<LoginUrlState> {
       } else {
         emit(LoginUrlConnectionError(_url, InstantMCConnectionErrorException("Unknown error", InstantMCConnectionErrorType.unknown)));
       }
+      print(e);
     } catch(e) {
       emit(LoginUrlConnectionError(_url, InstantMCConnectionErrorException("Unknown error", InstantMCConnectionErrorType.unknown)));
     }
