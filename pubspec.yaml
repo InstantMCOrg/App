@@ -41,6 +41,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   google_fonts: ^4.0.3
   equatable: ^2.0.5
+  universal_html: ^2.0.9
   dio: ^5.0.1
 
 dev_dependencies:
@@ -71,6 +72,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icon/instantmc_logo.riv
+    - assets/ca/lets-encrypt-r3.pem
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
