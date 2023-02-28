@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 
 class InstantMCApi {
   final _defaultPort = 25000;
-  //final _apiRoutePrefix = "/api";
-  final _apiRoutePrefix = "";
+  final _apiRoutePrefix = "/api";
   final _defaultBaseOptions = BaseOptions(
     contentType: Headers.jsonContentType,
     connectTimeout: const Duration(seconds: 5),
@@ -21,6 +24,15 @@ class InstantMCApi {
       baseUrl = "$baseUrl:$_defaultPort";
     }
     _dio = Dio(_defaultBaseOptions.copyWith(baseUrl: baseUrl));
+
+    if(!kIsWeb) {
+      (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true; // temporary solution, lets encrypt certificates otherwise won't work
+        return client;
+      };
+    }
   }
 
   String get targetMachineUrl => _dio.options.baseUrl;
