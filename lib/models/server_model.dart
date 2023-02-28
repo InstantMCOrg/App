@@ -1,6 +1,6 @@
 import 'package:InstantMC/constants/enums/server_status.dart';
 
-class Server {
+class ServerModel {
   final String _id;
   final String _name;
   final String _mcversion;
@@ -8,10 +8,10 @@ class Server {
   final int _ramSize;
   final ServerStatus _serverStatus;
 
-  Server(this._id, this._name, this._mcversion, this._port, this._ramSize,
+  ServerModel(this._id, this._name, this._mcversion, this._port, this._ramSize,
       this._serverStatus);
 
-  Server.fromJSON(Map<String, dynamic> json) :
+  ServerModel.fromJSON(Map<String, dynamic> json) :
         _id = json["server_id"],
         _name = json["name"],
         _mcversion = json["mc_version"],
