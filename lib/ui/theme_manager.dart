@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ThemeManager {
   static ThemeData dark() {
-    final colors = ColorManager.dark();
+    final colors = ColorManager.old();
 
     return ThemeData(
       colorScheme: ColorScheme(
