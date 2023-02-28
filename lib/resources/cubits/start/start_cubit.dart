@@ -12,11 +12,6 @@ class StartCubit extends Cubit<StartState> {
     if(serverUrl != null) {
       assert(kIsWeb);
       // we save the target url into storage so the user can skip the url step
-      final uri = Uri.parse(serverUrl);
-      // DEBUG
-      print(uri.hasScheme);
-      print(uri.scheme);
-      // DEBUG
       _storageRepository.saveTargetServerUrl(serverUrl).then((value) => init());
     } else {
       init();
