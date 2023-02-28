@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:InstantMC/constants/config.dart';
 import 'package:InstantMC/models/http/LoginResponseModel.dart';
-import 'package:InstantMC/models/ServerModel.dart';
+import 'package:InstantMC/models/server_model.dart';
 import 'package:InstantMC/resources/apis/instantmc_api.dart';
 
 class InstantMCRepository {
@@ -53,13 +53,12 @@ class InstantMCRepository {
     final response = await _api.getRunningServer();
 
     final data = jsonDecode(response.data);
-    final List<ServerModel> result = List.empty();
+    final List<ServerModel> result = List.empty(growable: true);
 
-    for(int i = 0; i < data.length; i++) {
-      result.add(ServerModel.fromJSON(data[i]));
+    for(int i = 0; i < data["server"].length; i++) {
+      result.add(ServerModel.fromJSON(data["server"][i]));
     }
 
     return result;
-  } 
-
+  }
 }
