@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:InstantMC/constants/config.dart';
 import 'package:InstantMC/models/http/LoginResponseModel.dart';
+import 'package:InstantMC/models/ServerModel.dart';
 import 'package:InstantMC/resources/apis/instantmc_api.dart';
 
 class InstantMCRepository {
@@ -48,5 +49,17 @@ class InstantMCRepository {
     return data["token"];
   }
 
+  Future<List<ServerModel>> getServer() async {
+    final response = await _api.getRunningServer();
+
+    final data = jsonDecode(response.data);
+    final List<ServerModel> result = List.empty();
+
+    for(int i = 0; i < data.length; i++) {
+      result.add(ServerModel.fromJSON(data[i]));
+    }
+
+    return result;
+  } 
 
 }
