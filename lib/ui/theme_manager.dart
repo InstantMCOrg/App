@@ -32,7 +32,7 @@ class ThemeManager {
         centerTitle: true,
         backgroundColor: colors.primary
       ),
-      cardColor: colors.cardBackgroundColor,
+      cardColor: ColorManager.cardBackgroundColor,
       textTheme: TextTheme(
         labelMedium: GoogleFonts.poppins(
           fontSize: 16,

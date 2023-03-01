@@ -7,8 +7,9 @@ class ColorManager {
   final Color onPrimary;
 
   static const Color error = Color.fromRGBO(255, 51, 51, 1);
-  final Color cardBackgroundColor = const Color.fromRGBO(59, 58, 65, 1);
-  final Color borderColor = const Color.fromRGBO(67, 67, 76, 1);
+  static const Color cardBackgroundColor = Color.fromRGBO(59, 58, 65, 1);
+  static const Color borderColor = Color.fromRGBO(67, 67, 76, 1);
+  static const Color borderFillColor = Color.fromRGBO(30, 28, 36, 1);
   static const Color white = Color.fromRGBO(255, 255, 255, 1);
   static const Color black = Color.fromRGBO(21, 19, 28, 1);
   static const Color grey = Color.fromRGBO(127, 128, 139, 1);
