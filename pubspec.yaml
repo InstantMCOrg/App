@@ -43,6 +43,7 @@ dependencies:
   equatable: ^2.0.5
   universal_html: ^2.0.9
   dio: ^5.0.1
+  syncfusion_flutter_charts: ^20.4.52
 
 dev_dependencies:
   flutter_test:
