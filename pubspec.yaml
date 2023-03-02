@@ -44,6 +44,7 @@ dependencies:
   universal_html: ^2.0.9
   dio: ^5.0.1
   syncfusion_flutter_charts: ^20.4.52
+  web_socket_channel: ^2.3.0
 
 dev_dependencies:
   flutter_test:
