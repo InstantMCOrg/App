@@ -3,6 +3,7 @@ enum InstantMCConnectionErrorType {
   noValidEndpoint,
   urlMalformed,
   wrongCredentials,
+  disconnected,
   unknown
 }
 
@@ -15,6 +16,8 @@ extension InstantMCConnectionErrorTypeToMessage on InstantMCConnectionErrorType 
         return "No InstantMC installation has been found.";
       case InstantMCConnectionErrorType.urlMalformed:
         return "Not a valid url.";
+      case InstantMCConnectionErrorType.disconnected:
+        return "Could not keep connection.";
       case InstantMCConnectionErrorType.wrongCredentials:
         return "Credentials incorrect.";
       default:
