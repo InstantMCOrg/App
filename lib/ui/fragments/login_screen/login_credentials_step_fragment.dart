@@ -51,6 +51,7 @@ class LoginCredentialsStepFragment extends StatelessWidget {
           listener: (context, state) {
             if(state is LoginSuccess) {
               // redirect to dashboard
+              context.read<UserCubit>().login(state.token);
               Navigator.pushReplacementNamed(context, Routes.dashboard);
             } else if(state is LoginSuccessPasswordChangeRequired) {
               context.read<UserCubit>().login(state.token);
