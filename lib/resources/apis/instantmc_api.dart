@@ -1,12 +1,13 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class InstantMCApi {
   final _defaultPort = 25000;
   final _apiRoutePrefix = "/api";
+  final timeout = const Duration(seconds: 5);
   final _defaultBaseOptions = BaseOptions(
     contentType: Headers.jsonContentType,
     connectTimeout: const Duration(seconds: 5),
@@ -18,11 +19,10 @@ class InstantMCApi {
 
   InstantMCApi.url(String baseUrl) {
     final uri = Uri.parse(baseUrl);
-
-    if(!uri.hasPort) {
+    /*if(!uri.hasPort) {
       // we should add the port
       baseUrl = "$baseUrl:$_defaultPort";
-    }
+    }*/
     _dio = Dio(_defaultBaseOptions.copyWith(baseUrl: baseUrl));
 
     if(!kIsWeb) {
@@ -39,6 +39,11 @@ class InstantMCApi {
 
   void setToken(String token) {
     _dio.options = _dio.options.copyWith(headers: {"auth":token});
+  }
+
+  String _convertHttpsToWsBaseUrl() {
+    final defaultBaseUrl = _dio.options.baseUrl;
+    return defaultBaseUrl.replaceAll("https", "wss").replaceAll("http", "ws");
   }
   
   Future<Response> rootRoute() async {
@@ -67,5 +72,11 @@ class InstantMCApi {
 
   Future<Response> getRunningServer() async {
     return _dio.get("$_apiRoutePrefix/server");
+  }
+
+  Future<WebSocket> subscribeServerStats(String serverID) async {
+    final baseUrl = _convertHttpsToWsBaseUrl();
+    final wsUrl = Uri.parse("$baseUrl$_apiRoutePrefix/server/stats/$serverID");
+    return await WebSocket.connect(wsUrl.toString(), headers: _dio.options.headers).timeout(timeout);
   }
 }
