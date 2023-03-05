@@ -1,7 +1,9 @@
 import 'package:InstantMC/models/server_model.dart';
 import 'package:InstantMC/models/server_resource_stats_model.dart';
+import 'package:InstantMC/resources/cubits/server_stats/server_stats_cubit.dart';
 import 'package:InstantMC/ui/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
@@ -78,7 +80,7 @@ class ServerWidget extends StatelessWidget {
           children: [
             _buildStatTextRow(context, Icons.memory, "CPU", textStyle),
             Text(
-              "x Cores",
+              "${_serverModel.coreCount} Cores",
               style: textStyle,
             ),
           ],
@@ -128,7 +130,8 @@ class ServerWidget extends StatelessWidget {
                     ),
                     TextSpan(
                       text: "CPU",
-                      style: TextStyle(color: _cpuUsageColor, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: _cpuUsageColor, fontWeight: FontWeight.bold),
                     ),
                     const TextSpan(
                       text: " in %",
@@ -138,35 +141,69 @@ class ServerWidget extends StatelessWidget {
                 )),
             Flexible(
               flex: 9,
-              child: SfCartesianChart(
-                margin: const EdgeInsets.all(10.0),
-                primaryXAxis: CategoryAxis(
-                  isVisible: false,
-                ),
-                primaryYAxis: NumericAxis(
-                  minimum: 0.0,
-                  maximum: 100.0,
-                  interval: 50,
-                ),
-                plotAreaBorderWidth: 0,
-                // we don't want the border on the right side
-                enableAxisAnimation: true,
-                series: <ChartSeries>[
-                  // RAM usage
-                  LineSeries<ServerResourceStatsModel, String>(
-                      dataSource: [
-                        ServerResourceStatsModel(50.0, 120, 120),
-                        ServerResourceStatsModel(40.0, 120, 120),
-                        ServerResourceStatsModel(70.0, 120, 120),
-                        ServerResourceStatsModel(20.0, 120, 120),
-                        ServerResourceStatsModel(60.0, 120, 120),
+              child: BlocBuilder<ServerStatsCubit, ServerStatsState>(
+                buildWhen: (oldState, newState) =>
+                    (newState is ServerStatsSubscribing &&
+                        newState.serverModel.id == _serverModel.id) ||
+                    (newState is ServerStatsUpdated &&
+                        newState.serverModel.id == _serverModel.id),
+                builder: (context, state) {
+                  final List<ServerResourceStatsModel> data =
+                      state is ServerStatsUpdated ? state.stats : [];
+                  final chartWidget = SfCartesianChart(
+                    margin: const EdgeInsets.all(10.0),
+                    primaryXAxis: CategoryAxis(
+                      isVisible: false,
+                    ),
+                    primaryYAxis: NumericAxis(
+                      minimum: 0.0,
+                      maximum: 100.0,
+                      interval: 50,
+                    ),
+                    plotAreaBorderWidth: 0,
+                    // we don't want the border on the right side
+                    enableAxisAnimation: true,
+                    series: <ChartSeries>[
+                      // RAM usage
+                      LineSeries<ServerResourceStatsModel, String>(
+                        animationDuration: 1000, // milliseconds
+                          dataSource: data,
+                          xValueMapper: (ServerResourceStatsModel data, _) =>
+                              data.dateTime.toString(),
+                          yValueMapper: (ServerResourceStatsModel data, _) =>
+                              data.memoryUsagePercent,
+                          color: _ramUsageColor),
+                      // CPU usage
+                      LineSeries<ServerResourceStatsModel, String>(
+                          animationDuration: 1000, // milliseconds
+                          dataSource: data,
+                          xValueMapper: (ServerResourceStatsModel data, _) =>
+                              data.dateTime.toString(),
+                          yValueMapper: (ServerResourceStatsModel data, _) =>
+                              data.cpuUsagePercent,
+                          color: _cpuUsageColor)
+                    ],
+                  );
+
+                  if (state is ServerStatsSubscribing) {
+                    return Stack(
+                      children: [
+                        Opacity(opacity: 0.3, child: chartWidget),
+                        Positioned.fill(
+                            child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Connecting...",
+                            style: Theme.of(context).textTheme.displaySmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        ))
                       ],
-                      xValueMapper: (ServerResourceStatsModel data, _) =>
-                          data.dateTime.toString(),
-                      yValueMapper: (ServerResourceStatsModel data, _) =>
-                          data.cpuUsagePercent,
-                      color: _cpuUsageColor)
-                ],
+                    );
+                  }
+
+                  return chartWidget;
+                },
               ),
             ),
           ],
